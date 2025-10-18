@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
         $table->id();
         $table->string('title');
+        $table->text('description');
+        $table->integer('price');
+        $table->integer('stock');
+        $table->string('cover_photo');
+        $table->unsignedBigInteger('genre_id'); 
         $table->unsignedBigInteger('author_id');
-        $table->unsignedBigInteger('genre_id'); // ✅ WAJIB ADA
-        $table->text('description')->nullable();
-        $table->string('cover_photo')->nullable();
-        $table->decimal('price', 10, 2)->default(0);
-        $table->integer('stock')->default(0);
         $table->timestamps();
 
         // Relasi
