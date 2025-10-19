@@ -14,13 +14,13 @@ class GenreController extends Controller
         if ($genres->isEmpty()) {
             return response()->json([
                 "success" => true,
-                "massage" => 'Resource data not found!'
+                "message" => 'Resource data not found!'
             ], 200);
         }
 
         return response()->json([
             "success" => true,
-            "massage" => "Get all resources",
+            "message" => "Get all resources",
             "data" => $genres
         ], 200);
     }
@@ -56,5 +56,98 @@ class GenreController extends Controller
             "message" => 'Resource added successfully',
             'data' => $genre 
         ], 201);
+    }
+
+    public function show(string $id) {
+        $genre = Genre::find($id);
+
+        if (!$genre) {
+            return response()->json([
+                "success" => false,
+                "message" => "Resource not found"
+            ], 404);
+        }
+
+        return response()->json([
+            "success" => true,
+            "message" => "Get detail resource",
+            "data" => $genre
+        ], 200);
+    }
+
+    public function update(string $id, Request $request) {
+        // 1. mencari data
+        $genre = Genre::find($id);
+
+        if (!$genre) {
+            return response()->json([
+                "success" => false,
+                "message" => "Resource not found"
+            ], 404);
+        }
+        // 2. validator
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:100',
+            'description' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validator->errors()
+            ], 422);
+        }
+
+        // 3. siapkan data yang ingin diupdate
+        $data = [
+            'name' => $request->name,
+            'description' => $request->description,
+        ];
+
+        // 4. handle image (upload $ delete image)
+        // if ($request->hasFile('cover_photo')) {
+        //     $image = $request->file('cover_photo');
+        //     $image->store('books', 'public');
+
+        //     if ($genre->cover_photo) {
+        //         Storage::disk('public')->delete('books/', $genre->cover_photo);
+
+        //     }
+
+        //     $data['cover_photo'] = $image->hashName();
+        // }
+
+        // 5. update data baru ke database
+        $genre->update($data);
+
+        return response()->json([
+            "success" => true,
+            "message" => 'Resource updated successfully',
+            'data' => $genre 
+        ], 200);
+    }
+
+    public function destroy(string $id) {
+        $genre = Genre::find($id);
+
+        if (!$genre) {
+            return response()->json([
+                "success" => false,
+                "message" => "Resource not found"
+            ], 404);
+        }
+
+        // if ($genre->cover_photo) {
+        //     //delete from storage
+        //     Storage::disk('public')->delete('books/', $genre->cover_photo);
+        // }
+        
+
+        $genre->delete();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Delete resource successfully" 
+        ]);
     }
 }
