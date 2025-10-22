@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Book extends Model
+class Transaction extends Model
 {
-    protected $table = 'books';
+    protected $table = 'transactions';
 
-    protected $fillable = ['title', 'description', 'price', 'stock', 'cover_photo', 'genre_id', 'author_id'
+    protected $fillable = [
+        'order_number', 'customer_id', 'book_id', 'total_amount'
     ];
 
     public function user()

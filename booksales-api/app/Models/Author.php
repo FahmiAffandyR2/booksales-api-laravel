@@ -6,9 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Author extends Model
 {
-   protected $table = 'authors';
+      protected $table = 'authors';
 
-   protected $fillable = ['name', 'bio', 'photo'];
+      protected $fillable = ['name', 'bio', 'photo'
+      ];
+
+      public function user()
+      {
+         return $this->belongsTo(User::class, 'customer_id');
+      }
+
+      public function book()
+      {
+         return $this->belongsTo(Book::class);
+      }
 }
  // public function getAuthors()
     // {
